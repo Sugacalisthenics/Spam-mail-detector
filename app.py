@@ -1,26 +1,36 @@
 import streamlit as st
 import pickle
+import os
 
-# 1. Website ki setting aur Parrot icon 🦜
+# 1. Page setting aur Parrot icon 🦜
 st.set_page_config(page_title="Spam Detector AI", page_icon="🦜")
 
-# 2. Main Title aur Heading
+# 2. Files ka sahi rasta (Path) nikalne ke liye
+base_path = os.path.dirname(__file__)
+vec_path = os.path.join(base_path, 'spam_vc.pkl')
+model_path = os.path.join(base_path, 'spam_model.pkl')
+
+# 3. Title aur Heading
 st.title("SMS & Email Spam Detector 🦜")
 st.markdown("AI model English messages padh kar bata sakta hai ki wo **Spam** hain ya **Asli**!")
 
-# 3. Model loading (Dabbe load karna)
+# 4. Model loading logic
 try:
-    # Terminal ke hisaab se filenames check kar liye hain
-    cv = pickle.load(open('spam_vc.pkl', 'rb'))
-    model = pickle.load(open('spam_model.pkl', 'rb'))
+    with open(vec_path, 'rb') as f1:
+        cv = pickle.load(f1)
+    with open(model_path, 'rb') as f2:
+        model = pickle.load(f2)
 except FileNotFoundError:
-    st.error("🚨 Bhai, dabbe (pkl files) nahi mil rahe! Check kar ki files ka naam 'spam_vc.pkl' aur 'spam_model.pkl' hi hai na?")
+    st.error("🚨 Error: 'spam_vc.pkl' ya 'spam_model.pkl' nahi mil rahi! Check karo ki files GitHub ke main folder mein hain.")
+    st.stop()
+except Exception as e:
+    st.error(f"🚨 Kuch gadbad ho gayi: {e}")
     st.stop()
 
-# 4. Input Box (Yahan message likho)
+# 5. Input Box
 input_sms = st.text_area("📝 Apna message yahan type ya paste karo 🦜:", height=150)
 
-# 5. Button dabane par kya hoga
+# 6. Button dabane par prediction
 if st.button("Check Spam 🔍"):
     if input_sms.strip() == "":
         st.warning("Arre! Pehle koi message toh type karoooo!")
