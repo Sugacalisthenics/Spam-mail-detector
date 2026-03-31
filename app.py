@@ -12,7 +12,7 @@ model_path = os.path.join(base_path, 'spam_model.pkl')
 
 # 3. Title aur Heading
 st.title("SMS & Email Spam Detector 🦜")
-st.markdown("AI model English messages padh kar bata sakta hai ki wo **Spam** hain ya **Asli**!")
+st.markdown("AI-integrated text analysis for real-time identification of Spam vs. Genuine messages.")
 
 # 4. Model loading logic
 try:
